@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Much Is Your Debt Costing Your Future Self? | Mixtape Millionaire</title>
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy:       #0D1B2A;
+      --navy-mid:   #122233;
+      --navy-light: #1A2F45;
+      --navy-card:  #162840;
+      --gold:       #C9A44C;
+      --gold-light: #DDB96A;
+      --gold-dark:  #A8842E;
+      --cream:      #F0E8D5;
+      --cream-muted:#C8BFA8;
+      --red:        #D4504A;
+      --green:      #4CAF76;
+      --border:     rgba(201, 164, 76, 0.25);
+      --radius:     10px;
+      --shadow:     0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    body {
+      background-color: var(--navy);
+      color: var(--cream);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       LAYOUT WRAPPER
+    ============================================================ */
+    .calc-wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 16px 64px;
+    }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .calc-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .calc-header .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .calc-header h1 {
+      font-size: clamp(22px, 5vw, 34px);
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .calc-header h1 span {
+      color: var(--gold);
+    }
+
+    .calc-header p {
+      font-size: 15px;
+      color: var(--cream-muted);
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       SECTION LABELS
+    ============================================================ */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    /* ============================================================
+       DEBT ROWS
+    ============================================================ */
+    #debts-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .debt-row {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 18px 16px;
+      position: relative;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .debt-row-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .debt-row-number {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .btn-remove {
+      background: none;
+      border: 1px solid rgba(212, 80, 74, 0.4);
+      color: var(--red);
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .btn-remove:hover {
+      background: rgba(212, 80, 74, 0.15);
+      border-color: var(--red);
+    }
+
+    /* Field grid inside a debt row */
+    .debt-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .debt-fields .field-type {
+      grid-column: 1 / -1; /* full width */
+    }
+
+    @media (min-width: 520px) {
+      .debt-fields {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      }
+      .debt-fields .field-type {
+        grid-column: auto;
+      }
+    }
+
+    /* ============================================================
+       FORM FIELDS
+    ============================================================ */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-group label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--cream-muted);
+      text-transform: uppercase;
+    }
+
+    .field-group input,
+    .field-group select {
+      background: var(--navy-light);
+      border: 1px solid rgba(201, 164, 76, 0.2);
+      border-radius: 6px;
+      color: var(--cream);
+      font-size: 15px;
+      padding: 9px 11px;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    .field-group input::placeholder {
+      color: rgba(240, 232, 213, 0.3);
+    }
+
+    .field-group input:focus,
+    .field-group select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201, 164, 76, 0.15);
+    }
+
+    .field-group input.error,
+    .field-group select.error {
+      border-color: var(--red);
+    }
+
+    /* Custom select arrow */
+    .select-wrap {
+      position: relative;
+    }
+
+    .select-wrap::after {
+      content: "▾";
+      position: absolute;
+      right: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      pointer-events: none;
+      font-size: 14px;
+    }
+
+    .select-wrap select {
+      padding-right: 30px;
+    }
+
+    /* Input prefix/suffix wrappers */
+    .input-affix {
+      position: relative;
+    }
+
+    .input-affix .prefix,
+    .input-affix .suffix {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--cream-muted);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    .input-affix .prefix {
+      left: 11px;
+    }
+
+    .input-affix .suffix {
+      right: 11px;
+    }
+
+    .input-affix input.has-prefix {
+      padding-left: 24px;
+    }
+
+    .input-affix input.has-suffix {
+      padding-right: 28px;
+    }
+
+    /* ============================================================
+       ADD DEBT BUTTON
+    ============================================================ */
+    .btn-add-debt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1.5px dashed rgba(201, 164, 76, 0.45);
+      border-radius: var(--radius);
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 20px;
+      cursor: pointer;
+      width: 100%;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+      margin-bottom: 28px;
+    }
+
+    .btn-add-debt:hover {
+      border-color: var(--gold);
+      background: rgba(201, 164, 76, 0.07);
+    }
+
+    .btn-add-debt .plus {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    /* ============================================================
+       SLIDERS & GLOBAL SETTINGS
+    ============================================================ */
+    .global-settings {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    @media (min-width: 520px) {
+      .global-settings {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .slider-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cream-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .slider-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--navy-light);
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(201,164,76,0.5);
+      transition: box-shadow 0.15s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 12px rgba(201,164,76,0.7);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 6px rgba(201,164,76,0.5);
+    }
+
+    .slider-range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: rgba(200, 191, 168, 0.5);
+    }
+
+    /* Return rate input group */
+    .return-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: flex-start;
+    }
+
+    .return-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    /* ============================================================
+       CALCULATE BUTTON
+    ============================================================ */
+    .btn-calculate {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      box-shadow: 0 4px 20px rgba(201,164,76,0.35);
+      text-transform: uppercase;
+    }
+
+    .btn-calculate:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-calculate:active {
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       ERROR MESSAGES
+    ============================================================ */
+    .error-msg {
+      background: rgba(212, 80, 74, 0.12);
+      border: 1px solid rgba(212, 80, 74, 0.4);
+      border-radius: var(--radius);
+      color: #F08080;
+      font-size: 14px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block;
+    }
+
+    /* ============================================================
+       RESULTS SECTION
+    ============================================================ */
+    #results {
+      display: none;
+      margin-top: 40px;
+      animation: fadeIn 0.35s ease;
+    }
+
+    #results.show {
+      display: block;
+    }
+
+    /* Headline */
+    .results-headline {
+      text-align: center;
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px 20px;
+      margin-bottom: 28px;
+    }
+
+    .results-headline .headline-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+      margin-bottom: 10px;
+    }
+
+    .results-headline .big-number {
+      font-size: clamp(36px, 8vw, 58px);
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .results-headline .big-number-label {
+      font-size: 14px;
+      color: var(--cream-muted);
+      margin-top: 8px;
+    }
+
+    /* Comparison bars */
+    .comparison {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 28px;
+    }
+
+    .comparison-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .bar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .bar-meta .bar-name {
+      color: var(--cream-muted);
+      font-weight: 600;
+    }
+
+    .bar-meta .bar-amount {
+      font-weight: 700;
+    }
+
+    .bar-track {
+      height: 12px;
+      background: var(--navy-light);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .bar-fill.interest {
+      background: linear-gradient(90deg, #D4504A, #E07070);
+    }
+
+    .bar-fill.invested {
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+    }
+
+    /* Debt breakdown table */
+    .breakdown {
+      margin-bottom: 28px;
+    }
+
+    .breakdown-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .breakdown-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .breakdown-card {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+
+    .breakdown-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .breakdown-card-type {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gold);
+    }
+
+    .breakdown-card-balance {
+      font-size: 13px;
+      color: var(--cream-muted);
+    }
+
+    .breakdown-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (min-width: 480px) {
+      .breakdown-stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: rgba(200, 191, 168, 0.6);
+    }
+
+    .stat-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .stat-value.highlight {
+      color: var(--gold);
+    }
+
+    .stat-value.negative {
+      color: #E07070;
+    }
+
+    /* Summary totals */
+    .summary-totals {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(201,164,76,0.12);
+    }
+
+    .summary-row:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .summary-row-label {
+      font-size: 14px;
+      color: var(--cream-muted);
+      font-weight: 500;
+    }
+
+    .summary-row-value {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .summary-row-value.red {
+      color: #E07070;
+    }
+
+    .summary-row-value.gold {
+      color: var(--gold);
+    }
+
+    /* Share button */
+    .btn-share {
+      width: 100%;
+      padding: 14px 24px;
+      background: none;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-share:hover {
+      background: rgba(201, 164, 76, 0.1);
+    }
+
+    .share-feedback {
+      text-align: center;
+      font-size: 13px;
+      color: var(--green);
+      margin-top: 8px;
+      height: 18px;
+      transition: opacity 0.3s;
+    }
+
+    /* CTA & disclaimer */
+    .cta-block {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cta-block p {
+      font-size: 15px;
+      color: var(--cream-muted);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .cta-block a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(201,164,76,0.4);
+      transition: border-color 0.15s;
+    }
+
+    .cta-block a:hover {
+      border-color: var(--gold);
+    }
+
+    .cta-block .cta-headline {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+
+    .disclaimer {
+      font-size: 11px;
+      color: rgba(200, 191, 168, 0.45);
+      text-align: center;
+      line-height: 1.6;
+      padding: 0 12px;
+    }
+
+    /* ============================================================
+       DIVIDER
+    ============================================================ */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    /* ============================================================
+       SCROLL REVEAL UTILITY
+    ============================================================ */
+    .reveal {
+      animation: fadeIn 0.4s ease both;
+    }
+  </style>
+</head>
+<body>
+
+<div class="calc-wrapper">
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header class="calc-header">
+    <span class="eyebrow">Mixtape Millionaire</span>
+    <h1>How Much Is Your Debt<br/><span>Costing Your Future Self?</span></h1>
+    <p>Enter your debts below and see the real price: not just the interest you will pay, but what that money could grow to if invested instead.</p>
+  </header>
+
+  <!-- ============================================================
+       DEBT ROWS
+  ============================================================ -->
+  <p class="section-label">Your Debts</p>
+  <div id="debts-container">
+    <!-- Rows are injected by JavaScript -->
+  </div>
+
+  <button class="btn-add-debt" id="btn-add-debt" type="button">
+    <span class="plus">+</span> Add Another Debt
+  </button>
+
+  <!-- ============================================================
+       GLOBAL SETTINGS
+  ============================================================ -->
+  <p class="section-label">Retirement Assumptions</p>
+  <div class="global-settings">
+
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Years Until Retirement</span>
+        <span class="slider-value" id="slider-years-display">20 yrs</span>
+      </div>
+      <input type="range" id="slider-years" min="5" max="35" value="20" step="1" />
+      <div class="slider-range-labels">
+        <span>5 yrs</span>
+        <span>35 yrs</span>
+      </div>
+    </div>
+
+    <div class="return-group">
+      <div class="return-header">
+        <span class="slider-label">Expected Investment Return</span>
+      </div>
+      <div class="field-group">
+        <div class="input-affix">
+          <input
+            type="number"
+            id="investment-return"
+            value="8"
+            min="1"
+            max="20"
+            step="0.1"
+            class="has-suffix"
+            placeholder="8"
+          />
+          <span class="suffix">%</span>
+        </div>
+      </div>
+      <div style="font-size:11px; color: rgba(200,191,168,0.5); line-height:1.5;">
+        Historical S&amp;P 500 avg: ~10%. A conservative 7-8% accounts for inflation.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+       CALCULATE BUTTON
+  ============================================================ -->
+  <button class="btn-calculate" id="btn-calculate" type="button">
+    Calculate My Opportunity Cost
+  </button>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <!-- ============================================================
+       RESULTS
+  ============================================================ -->
+  <div id="results">
+
+    <!-- Headline -->
+    <div class="results-headline reveal">
+      <div class="headline-label">Your debt is costing your future self</div>
+      <div class="big-number" id="result-headline-number">$0</div>
+      <div class="big-number-label">This is what your monthly payments could grow to if invested instead</div>
+    </div>
+
+    <!-- Comparison bars -->
+    <div class="comparison reveal">
+      <div class="comparison-title">The Real Cost Comparison</div>
+      <div class="bar-group">
+        <div class="bar-item">
+          <div class="bar-meta">
+            <span class="bar-name">Total interest you will pay</span>
+            <span class="bar-amount" id="bar-interest-label" style="color:#E07070;">$0</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill interest" id="bar-interest-fill" style="width:0%;"></div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-meta">
+            <span class="bar-name">What that money could be worth invested</span>
+            <span class="bar-amount" id="bar-invested-label" style="color:var(--gold);">$0</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill invested" id="bar-invested-fill" style="width:0%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary totals -->
+    <div class="summary-totals reveal">
+      <div class="summary-row">
+        <span class="summary-row-label">Total interest you will pay across all debts</span>
+        <span class="summary-row-value red" id="summary-interest">$0</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-row-label">What those payments could be worth invested</span>
+        <span class="summary-row-value gold" id="summary-invested">$0</span>
+      </div>
+    </div>
+
+    <!-- Per-debt breakdown -->
+    <div class="breakdown reveal">
+      <p class="breakdown-title">Breakdown by Debt</p>
+      <div class="breakdown-cards" id="breakdown-cards">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Share button -->
+    <button class="btn-share" id="btn-share" type="button">
+      Share This Result
+    </button>
+    <div class="share-feedback" id="share-feedback"></div>
+
+    <hr class="divider" />
+
+    <!-- CTA -->
+    <div class="cta-block reveal">
+      <p class="cta-headline">Ready to fight back against these numbers?</p>
+      <p>Want to change these numbers? Subscribe to Mixtape Millionaire for weekly strategies built for Gen X.</p>
+      <a href="https://mixtapemillionaire.com" target="_blank" rel="noopener">
+        Get weekly strategies at mixtapemillionaire.com
+      </a>
+    </div>
+
+    <p class="disclaimer">
+      Assumes no additional charges on credit cards. Monthly payments are assumed constant throughout the payoff period.
+      Future value projections assume consistent monthly contributions at the stated return rate.
+      For illustration only, not financial advice.
+    </p>
+
+  </div><!-- /results -->
+
+</div><!-- /calc-wrapper -->
+
+<script>
+  /* ============================================================
+     DEBT CALCULATOR - MIXTAPE MILLIONAIRE
+     All math runs client-side. No external dependencies.
+  ============================================================ */
+
+  // Track how many debt rows have been created (for IDs)
+  let debtCounter = 0;
+
+  // Maximum allowed debts
+  const MAX_DEBTS = 10;
+
+  /* ------------------------------------------------------------
+     DOM REFERENCES
+  ------------------------------------------------------------ */
+  const debtsContainer  = document.getElementById('debts-container');
+  const btnAddDebt      = document.getElementById('btn-add-debt');
+  const btnCalculate    = document.getElementById('btn-calculate');
+  const btnShare        = document.getElementById('btn-share');
+  const sliderYears     = document.getElementById('slider-years');
+  const sliderDisplay   = document.getElementById('slider-years-display');
+  const returnInput     = document.getElementById('investment-return');
+  const errorMsg        = document.getElementById('error-msg');
+  const resultsDiv      = document.getElementById('results');
+  const shareFeedback   = document.getElementById('share-feedback');
+
+  /* ------------------------------------------------------------
+     SLIDER: live display
+  ------------------------------------------------------------ */
+  sliderYears.addEventListener('input', function() {
+    sliderDisplay.textContent = this.value + ' yrs';
+  });
+
+  /* ------------------------------------------------------------
+     ADD DEBT ROW
+  ------------------------------------------------------------ */
+  function addDebtRow() {
+    if (debtsContainer.querySelectorAll('.debt-row').length >= MAX_DEBTS) {
+      return;
+    }
+
+    debtCounter++;
+    const id = debtCounter;
+
+    const row = document.createElement('div');
+    row.className = 'debt-row';
+    row.dataset.debtId = id;
+
+    row.innerHTML = `
+      <div class="debt-row-header">
+        <span class="debt-row-number">Debt #<span class="debt-num">${debtsContainer.querySelectorAll('.debt-row').length + 1}</span></span>
+        <button class="btn-remove" type="button" title="Remove this debt" onclick="removeDebtRow(${id})">&#x2715;</button>
+      </div>
+      <div class="debt-fields">
+        <div class="field-group field-type">
+          <label for="type-${id}">Type</label>
+          <div class="select-wrap">
+            <select id="type-${id}" onchange="onTypeChange(${id})">
+              <option value="Credit Card">Credit Card</option>
+              <option value="Auto Loan">Auto Loan</option>
+              <option value="Student Loan">Student Loan</option>
+              <option value="Mortgage">Mortgage</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="balance-${id}">Remaining Balance</label>
+          <div class="input-affix">
+            <span class="prefix">$</span>
+            <input type="number" id="balance-${id}" class="has-prefix" min="1" step="1" placeholder="5,000" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="apr-${id}">Interest Rate (APR)</label>
+          <div class="input-affix">
+            <input type="number" id="apr-${id}" class="has-suffix" min="0.1" max="99" step="0.1" placeholder="19.99" />
+            <span class="suffix">%</span>
+          </div>
+        </div>
+        <!-- Credit card: monthly payment -->
+        <div class="field-group" id="field-payment-${id}">
+          <label for="payment-${id}">Monthly Payment</label>
+          <div class="input-affix">
+            <span class="prefix">$</span>
+            <input type="number" id="payment-${id}" class="has-prefix" min="1" step="1" placeholder="150" />
+          </div>
+        </div>
+        <!-- Other loans: remaining months (hidden by default) -->
+        <div class="field-group" id="field-months-${id}" style="display:none;">
+          <label for="months-${id}">Remaining Months</label>
+          <div class="input-affix">
+            <input type="number" id="months-${id}" class="has-suffix" min="1" max="600" step="1" placeholder="48" />
+            <span class="suffix">mo</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    debtsContainer.appendChild(row);
+    updateAddButton();
+    renumberRows();
+  }
+
+  /* ------------------------------------------------------------
+     REMOVE DEBT ROW
+  ------------------------------------------------------------ */
+  function removeDebtRow(id) {
+    const row = debtsContainer.querySelector(`[data-debt-id="${id}"]`);
+    if (row) {
+      row.remove();
+    }
+    updateAddButton();
+    renumberRows();
+
+    // If all debts removed, add one back
+    if (debtsContainer.querySelectorAll('.debt-row').length === 0) {
+      addDebtRow();
+    }
+  }
+
+  /* ------------------------------------------------------------
+     TOGGLE PAYMENT vs MONTHS FIELD
+  ------------------------------------------------------------ */
+  function onTypeChange(id) {
+    const typeEl    = document.getElementById('type-' + id);
+    const payField  = document.getElementById('field-payment-' + id);
+    const moField   = document.getElementById('field-months-' + id);
+
+    if (typeEl.value === 'Credit Card') {
+      payField.style.display = '';
+      moField.style.display  = 'none';
+    } else {
+      payField.style.display = 'none';
+      moField.style.display  = '';
+    }
+  }
+
+  /* ------------------------------------------------------------
+     RENUMBER ROW LABELS
+  ------------------------------------------------------------ */
+  function renumberRows() {
+    const rows = debtsContainer.querySelectorAll('.debt-row');
+    rows.forEach((row, i) => {
+      const numEl = row.querySelector('.debt-num');
+      if (numEl) numEl.textContent = i + 1;
+    });
+  }
+
+  /* ------------------------------------------------------------
+     SHOW / HIDE "ADD DEBT" BUTTON
+  ------------------------------------------------------------ */
+  function updateAddButton() {
+    const count = debtsContainer.querySelectorAll('.debt-row').length;
+    btnAddDebt.style.display = count >= MAX_DEBTS ? 'none' : 'flex';
+  }
+
+  /* ------------------------------------------------------------
+     MATH HELPERS
+  ------------------------------------------------------------ */
+
+  /**
+   * Credit card: calculate months to payoff.
+   * n = -log(1 - (r * B / P)) / log(1 + r)
+   * @param {number} balance - Remaining balance
+   * @param {number} monthlyRate - Monthly interest rate (APR/12/100)
+   * @param {number} payment - Monthly payment
+   * @returns {number} months (rounded up)
+   */
+  function calcCreditCardMonths(balance, monthlyRate, payment) {
+    if (monthlyRate === 0) {
+      return Math.ceil(balance / payment);
+    }
+    const rB = monthlyRate * balance;
+    if (payment <= rB) {
+      // Payment doesn't cover interest -- payoff impossible
+      return Infinity;
+    }
+    const n = -Math.log(1 - rB / payment) / Math.log(1 + monthlyRate);
+    return Math.ceil(n);
+  }
+
+  /**
+   * Credit card: total interest paid.
+   * totalInterest = (P * n) - B
+   */
+  function calcCreditCardInterest(payment, months, balance) {
+    return (payment * months) - balance;
+  }
+
+  /**
+   * Fixed loan: calculate monthly payment from balance, rate, and term.
+   * PMT = B * r * (1+r)^n / ((1+r)^n - 1)
+   */
+  function calcLoanPayment(balance, monthlyRate, months) {
+    if (monthlyRate === 0) {
+      return balance / months;
+    }
+    const factor = Math.pow(1 + monthlyRate, months);
+    return balance * monthlyRate * factor / (factor - 1);
+  }
+
+  /**
+   * Fixed loan: total interest paid.
+   * totalInterest = (monthly_payment * remaining_months) - balance
+   */
+  function calcLoanInterest(balance, monthlyRate, months) {
+    const pmt = calcLoanPayment(balance, monthlyRate, months);
+    return (pmt * months) - balance;
+  }
+
+  /**
+   * Future value of annuity (what a recurring payment would become if invested).
+   * FV = PMT * ((1 + r)^n - 1) / r
+   * @param {number} pmt - Monthly payment/contribution
+   * @param {number} monthlyRate - Monthly investment return
+   * @param {number} months - Total months until retirement
+   * @returns {number} Future value
+   */
+  function futureValueAnnuity(pmt, monthlyRate, months) {
+    if (monthlyRate === 0) {
+      return pmt * months;
+    }
+    return pmt * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+  }
+
+  /* ------------------------------------------------------------
+     FORMAT HELPERS
+  ------------------------------------------------------------ */
+  function fmtDollar(n) {
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+
+  function fmtMonths(n) {
+    if (n === Infinity) return 'Never';
+    if (n >= 12) {
+      const yrs = Math.floor(n / 12);
+      const mo  = n % 12;
+      return mo > 0 ? yrs + 'y ' + mo + 'm' : yrs + 'y';
+    }
+    return n + ' mo';
+  }
+
+  /* ------------------------------------------------------------
+     VALIDATE & COLLECT INPUTS
+  ------------------------------------------------------------ */
+  function collectDebts() {
+    const rows = debtsContainer.querySelectorAll('.debt-row');
+    const debts = [];
+    const errors = [];
+
+    rows.forEach((row, idx) => {
+      const id      = row.dataset.debtId;
+      const typeEl  = document.getElementById('type-'    + id);
+      const balEl   = document.getElementById('balance-' + id);
+      const aprEl   = document.getElementById('apr-'     + id);
+      const payEl   = document.getElementById('payment-' + id);
+      const moEl    = document.getElementById('months-'  + id);
+
+      // Clear previous error styles
+      [balEl, aprEl, payEl, moEl].forEach(el => el && el.classList.remove('error'));
+
+      const type    = typeEl.value;
+      const balance = parseFloat(balEl.value);
+      const apr     = parseFloat(aprEl.value);
+      const isCreditCard = type === 'Credit Card';
+
+      // Validate balance
+      if (!balEl.value || isNaN(balance) || balance <= 0) {
+        balEl.classList.add('error');
+        errors.push('Debt #' + (idx + 1) + ': Please enter a valid remaining balance.');
+        return;
+      }
+
+      // Validate APR
+      if (!aprEl.value || isNaN(apr) || apr <= 0) {
+        aprEl.classList.add('error');
+        errors.push('Debt #' + (idx + 1) + ': Please enter a valid interest rate.');
+        return;
+      }
+
+      if (isCreditCard) {
+        const payment = parseFloat(payEl.value);
+        if (!payEl.value || isNaN(payment) || payment <= 0) {
+          payEl.classList.add('error');
+          errors.push('Debt #' + (idx + 1) + ': Please enter a monthly payment.');
+          return;
+        }
+
+        // Check that payment covers interest
+        const monthlyRate = apr / 100 / 12;
+        const minPayment  = balance * monthlyRate;
+        if (payment <= minPayment) {
+          payEl.classList.add('error');
+          errors.push(
+            'Debt #' + (idx + 1) + ': Monthly payment must be greater than ' +
+            fmtDollar(minPayment) + ' to pay off this balance.'
+          );
+          return;
+        }
+
+        debts.push({ id, type, balance, apr, payment, months: null });
+
+      } else {
+        const months = parseInt(moEl.value, 10);
+        if (!moEl.value || isNaN(months) || months <= 0) {
+          moEl.classList.add('error');
+          errors.push('Debt #' + (idx + 1) + ': Please enter the remaining months.');
+          return;
+        }
+        debts.push({ id, type, balance, apr, payment: null, months });
+      }
+    });
+
+    return { debts, errors };
+  }
+
+  /* ------------------------------------------------------------
+     MAIN CALCULATE FUNCTION
+  ------------------------------------------------------------ */
+  function calculate() {
+    hideError();
+
+    const { debts, errors } = collectDebts();
+
+    if (errors.length > 0) {
+      showError(errors.join('<br/>'));
+      return;
+    }
+
+    if (debts.length === 0) {
+      showError('Please add at least one debt.');
+      return;
+    }
+
+    const yearsUntilRetirement  = parseInt(sliderYears.value, 10);
+    const investReturnPct       = parseFloat(returnInput.value);
+
+    if (isNaN(investReturnPct) || investReturnPct <= 0) {
+      showError('Please enter a valid expected investment return.');
+      return;
+    }
+
+    const monthsUntilRetirement = yearsUntilRetirement * 12;
+    const monthlyInvestRate     = investReturnPct / 100 / 12;
+
+    // Process each debt
+    const results = debts.map(debt => {
+      const monthlyRate = debt.apr / 100 / 12;
+      let payment, payoffMonths, totalInterest;
+
+      if (debt.type === 'Credit Card') {
+        payment      = debt.payment;
+        payoffMonths = calcCreditCardMonths(debt.balance, monthlyRate, payment);
+        totalInterest = calcCreditCardInterest(payment, payoffMonths, debt.balance);
+      } else {
+        payoffMonths  = debt.months;
+        payment       = calcLoanPayment(debt.balance, monthlyRate, payoffMonths);
+        totalInterest = calcLoanInterest(debt.balance, monthlyRate, payoffMonths);
+      }
+
+      // Future value: if you redirected this monthly payment into investments
+      // for the full years-until-retirement horizon
+      const futureValue = futureValueAnnuity(payment, monthlyInvestRate, monthsUntilRetirement);
+
+      return {
+        type:         debt.type,
+        balance:      debt.balance,
+        apr:          debt.apr,
+        payment:      payment,
+        payoffMonths: payoffMonths,
+        totalInterest: Math.max(0, totalInterest),
+        futureValue:  futureValue
+      };
+    });
+
+    // Totals
+    const totalInterest   = results.reduce((s, r) => s + r.totalInterest, 0);
+    const totalFutureValue = results.reduce((s, r) => s + r.futureValue, 0);
+
+    // Render
+    renderResults(results, totalInterest, totalFutureValue, yearsUntilRetirement, investReturnPct);
+  }
+
+  /* ------------------------------------------------------------
+     RENDER RESULTS
+  ------------------------------------------------------------ */
+  function renderResults(results, totalInterest, totalFutureValue, years, returnPct) {
+
+    // Headline
+    document.getElementById('result-headline-number').textContent = fmtDollar(totalFutureValue);
+
+    // Comparison bars
+    const maxVal = Math.max(totalInterest, totalFutureValue, 1);
+    const interestPct  = (totalInterest   / maxVal) * 100;
+    const investedPct  = (totalFutureValue / maxVal) * 100;
+
+    document.getElementById('bar-interest-label').textContent  = fmtDollar(totalInterest);
+    document.getElementById('bar-invested-label').textContent  = fmtDollar(totalFutureValue);
+
+    // Trigger bar animations on next paint
+    requestAnimationFrame(() => {
+      document.getElementById('bar-interest-fill').style.width  = interestPct  + '%';
+      document.getElementById('bar-invested-fill').style.width  = investedPct + '%';
+    });
+
+    // Summary totals
+    document.getElementById('summary-interest').textContent  = fmtDollar(totalInterest);
+    document.getElementById('summary-invested').textContent  = fmtDollar(totalFutureValue);
+
+    // Per-debt breakdown
+    const cardsContainer = document.getElementById('breakdown-cards');
+    cardsContainer.innerHTML = '';
+
+    results.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'breakdown-card';
+      card.innerHTML = `
+        <div class="breakdown-card-header">
+          <span class="breakdown-card-type">${r.type}</span>
+          <span class="breakdown-card-balance">Balance: ${fmtDollar(r.balance)}</span>
+        </div>
+        <div class="breakdown-stats">
+          <div class="stat-item">
+            <span class="stat-label">Monthly Pmt</span>
+            <span class="stat-value">${fmtDollar(r.payment)}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Payoff</span>
+            <span class="stat-value">${fmtMonths(r.payoffMonths)}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Interest Paid</span>
+            <span class="stat-value negative">${fmtDollar(r.totalInterest)}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Invested Value*</span>
+            <span class="stat-value highlight">${fmtDollar(r.futureValue)}</span>
+          </div>
+        </div>
+      `;
+      cardsContainer.appendChild(card);
+    });
+
+    // Store for share
+    window._lastShareData = {
+      results, totalInterest, totalFutureValue, years, returnPct
+    };
+
+    // Show results
+    resultsDiv.classList.add('show');
+
+    // Scroll to results
+    setTimeout(() => {
+      resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+
+  /* ------------------------------------------------------------
+     SHARE FUNCTION
+  ------------------------------------------------------------ */
+  btnShare.addEventListener('click', function() {
+    const d = window._lastShareData;
+    if (!d) return;
+
+    let lines = [
+      'How Much Is Your Debt Costing Your Future Self?',
+      '(via Mixtape Millionaire -- mixtapemillionaire.com)',
+      '',
+      'My debt results:',
+    ];
+
+    d.results.forEach(r => {
+      lines.push(
+        '- ' + r.type + ' | Balance: ' + fmtDollar(r.balance) +
+        ' | Monthly: ' + fmtDollar(r.payment) +
+        ' | Interest paid: ' + fmtDollar(r.totalInterest) +
+        ' | Invested value: ' + fmtDollar(r.futureValue)
+      );
+    });
+
+    lines.push('');
+    lines.push('Total interest I will pay: ' + fmtDollar(d.totalInterest));
+    lines.push('What that could be worth invested (' + d.returnPct + '% return, ' + d.years + ' years): ' + fmtDollar(d.totalFutureValue));
+    lines.push('');
+    lines.push('Calculate yours: mixtapemillionaire.com');
+
+    const text = lines.join('\n');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showShareFeedback('Copied to clipboard! Paste and share anywhere.');
+      }).catch(() => {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  });
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showShareFeedback('Copied to clipboard! Paste and share anywhere.');
+    } catch(e) {
+      showShareFeedback('Could not copy automatically. Select the text above to copy.');
+    }
+    document.body.removeChild(ta);
+  }
+
+  function showShareFeedback(msg) {
+    shareFeedback.textContent = msg;
+    setTimeout(() => { shareFeedback.textContent = ''; }, 4000);
+  }
+
+  /* ------------------------------------------------------------
+     ERROR HELPERS
+  ------------------------------------------------------------ */
+  function showError(html) {
+    errorMsg.innerHTML = html;
+    errorMsg.classList.add('show');
+    errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function hideError() {
+    errorMsg.classList.remove('show');
+    errorMsg.innerHTML = '';
+  }
+
+  /* ------------------------------------------------------------
+     WIRE UP EVENTS
+  ------------------------------------------------------------ */
+  btnAddDebt.addEventListener('click', addDebtRow);
+  btnCalculate.addEventListener('click', calculate);
+
+  /* ------------------------------------------------------------
+     INIT: add first debt row on page load
+  ------------------------------------------------------------ */
+  addDebtRow();
+
+</script>
+</body>
+</html>
