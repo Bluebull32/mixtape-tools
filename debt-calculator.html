@@ -879,7 +879,7 @@
     <div class="results-headline reveal">
       <div class="headline-label">Your debt is costing your future self</div>
       <div class="big-number" id="result-headline-number">$0</div>
-      <div class="big-number-label">This is what your monthly payments could grow to if invested instead</div>
+      <div class="big-number-label">This is what your interest payments could have grown to if invested instead</div>
     </div>
 
     <!-- Comparison bars -->
@@ -897,7 +897,7 @@
         </div>
         <div class="bar-item">
           <div class="bar-meta">
-            <span class="bar-name">What that money could be worth invested</span>
+            <span class="bar-name">What that interest could be worth if invested instead</span>
             <span class="bar-amount" id="bar-invested-label" style="color:var(--gold);">$0</span>
           </div>
           <div class="bar-track">
@@ -914,7 +914,7 @@
         <span class="summary-row-value red" id="summary-interest">$0</span>
       </div>
       <div class="summary-row">
-        <span class="summary-row-label">What those payments could be worth invested</span>
+        <span class="summary-row-label">What that interest could be worth if invested instead</span>
         <span class="summary-row-value gold" id="summary-invested">$0</span>
       </div>
     </div>
@@ -946,8 +946,8 @@
 
     <p class="disclaimer">
       Assumes no additional charges on credit cards. Monthly payments are assumed constant throughout the payoff period.
-      Future value projections assume consistent monthly contributions at the stated return rate.
-      For illustration only, not financial advice.
+      Opportunity cost is calculated by taking the interest portion of each monthly payment, then compounding it forward
+      from that month to retirement at the stated return rate. For illustration only, not financial advice.
     </p>
 
   </div><!-- /results -->
@@ -1166,18 +1166,45 @@
   }
 
   /**
-   * Future value of annuity (what a recurring payment would become if invested).
-   * FV = PMT * ((1 + r)^n - 1) / r
-   * @param {number} pmt - Monthly payment/contribution
-   * @param {number} monthlyRate - Monthly investment return
-   * @param {number} months - Total months until retirement
-   * @returns {number} Future value
+   * Opportunity cost of debt interest payments.
+   *
+   * For each month of the payoff period, calculates the interest portion
+   * of that month's payment and compounds it forward to retirement.
+   * The total opportunity cost is the sum of all those compounded values.
+   *
+   * @param {number} balance       - Starting balance
+   * @param {number} monthlyRate   - Monthly interest rate (APR/12/100)
+   * @param {number} payoffMonths  - Number of months to pay off the debt
+   * @param {number} monthlyInvestRate - Monthly investment return rate
+   * @param {number} monthsUntilRetirement - Total months to retirement
+   * @returns {number} Total opportunity cost at retirement
    */
-  function futureValueAnnuity(pmt, monthlyRate, months) {
-    if (monthlyRate === 0) {
-      return pmt * months;
+  function calcOpportunityCost(balance, monthlyRate, payoffMonths, payment, monthlyInvestRate, monthsUntilRetirement) {
+    let remaining = balance;
+    let totalOpportunityCost = 0;
+
+    for (let month = 1; month <= payoffMonths; month++) {
+      // Interest portion of this month's payment
+      const interestPortion = remaining * monthlyRate;
+
+      // Months this dollar has to grow before retirement
+      const monthsToGrow = monthsUntilRetirement - month;
+
+      if (monthsToGrow > 0) {
+        // Compound this interest payment forward to retirement
+        totalOpportunityCost += interestPortion * Math.pow(1 + monthlyInvestRate, monthsToGrow);
+      } else {
+        // Payment is at or past retirement -- no growth
+        totalOpportunityCost += interestPortion;
+      }
+
+      // Reduce balance by principal portion
+      const principalPortion = payment - interestPortion;
+      remaining -= principalPortion;
+      if (remaining < 0) remaining = 0;
     }
-    return pmt * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+
+    return totalOpportunityCost;
   }
 
   /* ------------------------------------------------------------
@@ -1315,9 +1342,11 @@
         totalInterest = calcLoanInterest(debt.balance, monthlyRate, payoffMonths);
       }
 
-      // Future value: if you redirected this monthly payment into investments
-      // for the full years-until-retirement horizon
-      const futureValue = futureValueAnnuity(payment, monthlyInvestRate, monthsUntilRetirement);
+      // Opportunity cost: interest paid each month, compounded from that month to retirement
+      const futureValue = calcOpportunityCost(
+        debt.balance, monthlyRate, payoffMonths, payment,
+        monthlyInvestRate, monthsUntilRetirement
+      );
 
       return {
         type:         debt.type,
@@ -1390,7 +1419,7 @@
             <span class="stat-value negative">${fmtDollar(r.totalInterest)}</span>
           </div>
           <div class="stat-item">
-            <span class="stat-label">Invested Value*</span>
+            <span class="stat-label">Opportunity Cost</span>
             <span class="stat-value highlight">${fmtDollar(r.futureValue)}</span>
           </div>
         </div>
